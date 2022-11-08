@@ -1,0 +1,14 @@
+<html>
+<head>
+</head>
+<title>Template</title>
+<body>
+{{template "tmpl1.tmpl" .}}
+<a href="/user?email={{.Email}}">user</a>
+</body>
+<script>
+var email={{.Email}}
+var name={{.Name}}
+var age={{.Age}}
+</script>
+</html>

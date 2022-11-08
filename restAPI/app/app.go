@@ -3,7 +3,7 @@ package app
 import (
 	"encoding/json"
 	"fmt"
-	mux2 "github.com/gorilla/mux"
+	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
 	"time"
@@ -42,7 +42,7 @@ func usersHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func getUserInfoHandler(w http.ResponseWriter, r *http.Request) {
-	vars := mux2.Vars(r)
+	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -83,7 +83,7 @@ func createUserHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteUserHandler(w http.ResponseWriter, r *http.Request) {
-	vars := mux2.Vars(r)
+	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 
 	if err != nil {
@@ -136,7 +136,7 @@ func updateUserHandler(w http.ResponseWriter, r *http.Request) {
 func NewHandler() http.Handler {
 	userMap = make(map[int]*User)
 	lastID = 0
-	mux2 := mux2.NewRouter()
+	mux2 := mux.NewRouter()
 
 	mux2.HandleFunc("/", indexHandler)
 	mux2.HandleFunc("/users", usersHandler).Methods("GET")

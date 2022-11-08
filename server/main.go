@@ -1,8 +1,8 @@
 package main
 
 import (
-	"golang/app"
 	"net/http"
+	"server/app"
 )
 
 func main() {

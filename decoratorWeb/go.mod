@@ -1,4 +1,4 @@
-module server
+module decoratorWeb
 
 go 1.19
 

@@ -104,7 +104,6 @@ func main() {
 	sender2 := &ZipComponent{
 		com: &SendComponent{},
 	}
-
 	sender2.Operator("Hello World")
 	fmt.Println(sentData)
 

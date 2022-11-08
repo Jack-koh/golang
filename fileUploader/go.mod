@@ -1,4 +1,4 @@
-module golang
+module fileUploader
 
 go 1.19
 
