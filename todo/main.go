@@ -9,6 +9,7 @@ import (
 
 func main() {
 	m := app.MakeNewHandler()
+	defer m.Close()
 	n := negroni.Classic()
 	n.UseHandler(m)
 

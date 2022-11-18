@@ -14,8 +14,12 @@ import (
 
 func TestTodos(t *testing.T) {
 	assert := assert.New(t)
-	ts := httptest.NewServer(MakeNewHandler())
+	ah := MakeNewHandler()
+	defer ah.Close()
+
+	ts := httptest.NewServer(ah)
 	defer ts.Close()
+
 	resp, err := http.PostForm(ts.URL+"/todos", url.Values{"name": {"Test todo"}})
 	assert.NoError(err)
 	assert.Equal(http.StatusCreated, resp.StatusCode)
