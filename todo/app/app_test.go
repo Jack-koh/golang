@@ -13,6 +13,10 @@ import (
 )
 
 func TestTodos(t *testing.T) {
+	getSesssionID = func(r *http.Request) string {
+		return "testsessionId"
+	}
+
 	assert := assert.New(t)
 	ah := MakeNewHandler()
 	defer ah.Close()

@@ -10,9 +10,9 @@ type sqlHandler struct {
 	db *sql.DB
 }
 
-func (s *sqlHandler) GetTodos() []*Todo {
+func (s *sqlHandler) GetTodos(sessionId string) []*Todo {
 	todos := []*Todo{}
-	rows, err := s.db.Query("SELECT * FROM todos")
+	rows, err := s.db.Query("SELECT * FROM todos WHERE sessionId=?", sessionId)
 	defer rows.Close()
 	if err != nil {
 		panic(err)
@@ -25,12 +25,12 @@ func (s *sqlHandler) GetTodos() []*Todo {
 	return todos
 }
 
-func (s *sqlHandler) AddTodo(name string) *Todo {
-	statement, err := s.db.Prepare("INSERT INTO todos (name, completed,createdAt) VALUES (?, ?, DATE_FORMAT(now(), '%Y-%m-%d %H:%i:%s'))")
+func (s *sqlHandler) AddTodo(name string, sessionId string) *Todo {
+	statement, err := s.db.Prepare("INSERT INTO todos (sessionId, name, completed,createdAt) VALUES (?, ?, ?, DATE_FORMAT(now(), '%Y-%m-%d %H:%i:%s'))")
 	if err != nil {
 		panic(err)
 	}
-	result, err := statement.Exec(name, false)
+	result, err := statement.Exec(sessionId, name, false)
 	if err != nil {
 		panic(err)
 	}
@@ -77,15 +77,19 @@ func newSqlHandler() DBHandler {
 	if err != nil {
 		panic(err)
 	}
-	database.Query("DROP TABLE todos")
+	database.Query(`DROP TABLE IF EXISTS todos;`)
+	database.Query(`DROP INDEX sessionIdIndexOnTodos ON Todos;`)
+
 	statement, _ := database.Prepare(
 		`CREATE TABLE IF NOT EXISTS todos (
 					id INT AUTO_INCREMENT PRIMARY KEY,
+					sessionId VARCHAR(255),
 					name VARCHAR(255),
 					completed BOOLEAN,
 					createdAt DATETIME
-				)`)
+				);`)
 	statement.Exec()
+	database.Query(`CREATE INDEX sessionIdIndexOnTodos ON todos (sessionId ASC);`)
 
 	return &sqlHandler{db: database}
 }
